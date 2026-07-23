@@ -1,0 +1,19 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+#
+# This source code is licensed under the BSD-style license found in the
+# LICENSE file in the root directory of this source tree.
+cff-version: 1.2.0
+message: "If you use proxymate in your research, please cite this repository. A manuscript describing the framework is currently under review."
+title: proxymate
+abstract: A four-level framework for proxy metric validation: diagnose, then correct.
+license: BSD-3-Clause
+repository-code: "https://github.com/facebookresearch/proxymate"
+authors:
+  - family-names: Darmon
+    given-names: Alexandra
+  - family-names: Sinha
+    given-names: Deeksha
+  - family-names: Wilkins-Reeves
+    given-names: Steve
+  - family-names: Gocmen
+    given-names: Caner

@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  # Guarantees `pip install proxymate` (no extras) is importable on its own.
+  # Catches optional dependencies (e.g. multicalibration) leaking
+  # into module-level imports.
+  minimal-install:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Install (core only, no extras)
+        run: |
+          python -m pip install --upgrade pip
+          pip install .
+      - name: Import smoke test
+        run: python -c "import proxymate; print(proxymate.__version__)"
+
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+
+    steps:
+      - uses: actions/checkout@v5
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev,calibration]"
+      - name: Lint
+        run: |
+          black --check .
+          isort --check .
+          flake8 --max-line-length 88 --extend-ignore E203,W503 .
+      - name: Test
+        run: pytest --cov=proxymate --cov-report=term-missing -v

@@ -1,0 +1,98 @@
+[build-system]
+requires = ["setuptools>=64", "setuptools-scm>=8"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "proxymate"
+dynamic = ["version"]
+description = "A four-level framework for proxy metric validation: diagnose, then correct."
+requires-python = ">=3.10"
+readme = "README.md"
+license = {text = "BSD-3-Clause"}
+authors = [
+    {name = "Alexandra Darmon"},
+    {name = "Deeksha Sinha"},
+    {name = "Steve Wilkins-Reeves"},
+    {name = "Caner Gocmen"},
+]
+keywords = [
+    "proxy metrics",
+    "surrogate endpoints",
+    "validation",
+    "meta-analysis",
+    "PPI",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+    "Typing :: Typed",
+]
+dependencies = [
+    "numpy>=1.24",
+    "pandas>=2.0",
+    "scipy>=1.10",
+    "scikit-learn>=1.2",
+    "plotly>=5.0",
+    "tabulate>=0.9",
+    "matplotlib>=3.7",
+]
+
+[project.optional-dependencies]
+calibration = ["mcgrad"]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "black>=23.0",
+    "isort>=5.12",
+    "flake8>=6.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/facebookresearch/proxymate"
+Documentation = "https://facebookresearch.github.io/proxymate"
+Repository = "https://github.com/facebookresearch/proxymate"
+Issues = "https://github.com/facebookresearch/proxymate/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools_scm]
+root = "."
+fallback_version = "0.0.0"
+
+[tool.black]
+line-length = 88
+
+[tool.isort]
+profile = "black"
+# Match the case-insensitive ordering used by the repo's import sorter (usort)
+# so `isort --check` agrees with the committed layout: sort case-insensitively
+# and keep local `proxymate` imports in the same block as third-party.
+order_by_type = false
+combine_as_imports = true
+known_third_party = ["proxymate"]
+
+[tool.pytest.ini_options]
+# Tests are co-located with the code they cover, under */tests/ throughout
+# the package, rather than in a single top-level tests/ directory.
+testpaths = ["."]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+
+[tool.coverage.run]
+source = ["src/proxymate"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "@abstractmethod",
+]
